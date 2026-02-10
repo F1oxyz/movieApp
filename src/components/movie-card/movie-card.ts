@@ -39,14 +39,7 @@ import { Router } from "@angular/router";
                             class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition-colors text-sm shadow-md">
                             Ver más
                         </button>
-                        <a class="flex-1 bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2 rounded-lg transition-colors flex items-center justify-center gap-1 shadow-md" 
-                           [href]="(movie.title ? 'https://vidlink.pro/movie/' : 'https://vidlink.pro/tv/') + movie.id"
-                           target="_blank">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M8 5v14l11-7z" />
-                            </svg>
-                            <span class="text-sm">Play</span>
-                        </a>
+                        
                     </div>
                 </div>
             </div>

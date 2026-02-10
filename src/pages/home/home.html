@@ -1,270 +1,77 @@
-<div class="grid grid-cols-2 gap-2">
-    <div class="bg-amber-100 m-2 p-2 rounded-xl">
-        <h1 class="text-xl font-bold">Directiva @ if </h1>
-        <hr>
-        <div class="m-1">
-            @if(showContent == true){
-            <p class="text-justify">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis neque non ipsum, corrupti harum cumque
-                nesciunt eius sequi! Iste repudiandae eum consequatur, provident fugit numquam? Nam autem illum ratione
-                officia!
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet dicta cumque ratione reiciendis in
-                deleniti deserunt fugiat, magni architecto similique sit eveniet! Vitae ipsum exercitationem incidunt,
-                deserunt et quisquam optio?
-            </p>}
-            @else{
-            <p>Ver bajo su propio riesgo...</p>
+<div class="min-h-screen bg-white py-8">
+    <!-- Header -->
+    <div class="px-4 sm:px-8 mb-6">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Cartelera</h1>
+        <p class="text-gray-600">Las películas más populares en cines</p>
+    </div>
+
+    <div class="px-4 sm:px-8">
+        <div class="flex gap-4 overflow-x-auto scrollbar-hide pb-4 scroll-smooth snap-x snap-mandatory">
+            @for (peli of Cartelera; track peli.id) {
+                <app-movie-card [movie]="peli"></app-movie-card>
             }
-            <button (click)="verSpoiler()"
-                class="mt-2 bg-amber-500 rounded p-2 text-light-medium cursor-pointer hover:bg-gray-300">
-                {{showContent ? 'Ocultar Spoiler' : 'Ver Spoiler'}}
-            </button>
-        </div>
-    </div>
-
-    <div class="bg-blue-300 m-2 p-2 rounded-xl">
-        <h1 class="text-xl font-bold">Menú </h1>
-        <hr>
-        <div class="m-1">
-            <ul>
-                <li class="text-lg font-bold border p-2">Usuarios</li>
-                @if(rol == 'user'){
-                <li class="text-lg font-bold border p-2">Perfil</li>
-                }@else{
-                <li class="text-lg font-bold border p-2">Ventas</li>
-                }
-                <li class="text-lg font-bold border p-2">Configuración</li>
-            </ul>
-            <button (click)="serAdmin()"
-                class="mt-2 bg-amber-500 rounded p-2 text-light-medium cursor-pointer hover:bg-gray-300">
-                Ser admin
-            </button>
-        </div>
-    </div>
-
-    <div class="bg-amber-300 m-2 p-2 rounded-xl">
-        <h1 class="text-2xl mb-3 font-extralight">Directiva @ for</h1>
-        <hr>
-        <!-- el for solo funciona con arrreglos -->
-        @for (dia of diasSemana; track $index) {
-        <button class="bg-amber-700 m-2 p-1 w-1/2 rounded-xl font-medium text-zinc-50"> {{ dia }} </button>
-        }
-
-    </div>
-    <div class="bg-purple-300 m-2 p-2 rounded-xl">
-    <h1 class="text-2xl mb-3 font-extralight">Directiva @ for con array de objetos</h1>
-    <hr>
-    @for (contacto of contactos; track $index) {
-    <div class="flex flex-col gap-2 p-8 sm:flex-row sm:items-center sm:gap-6 sm:py-4">
-        <img class="size-12" src="/images/contact.svg" alt="contacto">
-
-        <div class="space-y-2 text-center sm:text-left">
-            <div class="space-y-0.5">
-                <p class="text-lg font-semibold text-black">{{ contacto.nombre }}</p>
-                <p class="font-medium text-gray-500">{{ contacto.email }}</p>
-            </div>
             
-            <!-- Redes sociales con método -->
-            <div class="flex gap-2 justify-center sm:justify-start">
-                @for (red of contacto.redesSociales; track $index) {
-                <a [class]="obtenerColorRedSocial(red) + ' p-2 size-8 flex items-center justify-center rounded-full hover:scale-110 transition-transform cursor-pointer'">
-                    <svg width="28" height="28" class="fill-white">
-                        <use [attr.xlink:href]="'images/sprite.svg#' + red"></use>
-                    </svg>
-                </a>
-                }
-            </div>
+            @empty {
+                <div class="w-full text-center py-12">
+                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 mb-4"></div>
+                    <p class="text-gray-600 text-lg">Cargando películas...</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="px-4 sm:px-8 mb-6">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Estrenos</h1>
+        <p class="text-gray-600">Las películas que se estrenarán próximamente</p>
+    </div>
+
+    <!-- Scroll horizontal -->
+    <div class="px-4 sm:px-8">
+        <div class="flex gap-4 overflow-x-auto scrollbar-hide pb-4 scroll-smooth snap-x snap-mandatory">
+            @for (peli of upComing; track peli.id) {
+                <app-movie-card [movie]="peli"></app-movie-card>
+            }
             
-            <button (click)="verNumero(contacto)" 
-                class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-                {{contacto.telefonoOculto ? 'Ver teléfono' : 'Ocultar teléfono'}}
-            </button>
-
-            @if (!contacto.telefonoOculto) {
-                <p class="font-medium text-gray-700 bg-white px-3 py-1 rounded inline-block">
-                    📞 {{ contacto.telefono }}
-                </p>
-            }
-        </div>
-    </div>
-    }
-</div>
-
-    <!-- NUEVO: Directiva @switch - Selector de Planes -->
-    <div class="bg-green-300 m-2 p-2 rounded-xl">
-        <h1 class="text-2xl mb-3 font-extralight">Directiva @ switch - Planes de suscripción</h1>
-        <hr>
-        <div class="m-3">
-            <div class="flex gap-2 mb-4">
-                <button (click)="cambiarPlan('basico')" 
-                    class="bg-green-600 p-2 rounded text-white hover:bg-green-700">
-                    Plan Básico
-                </button>
-                <button (click)="cambiarPlan('pro')" 
-                    class="bg-blue-600 p-2 rounded text-white hover:bg-blue-700">
-                    Plan Pro
-                </button>
-                <button (click)="cambiarPlan('premium')" 
-                    class="bg-purple-600 p-2 rounded text-white hover:bg-purple-700">
-                    Plan Premium
-                </button>
-                <button (click)="cambiarPlan('enterprise')" 
-                    class="bg-orange-600 p-2 rounded text-white hover:bg-orange-700">
-                    Plan Enterprise
-                </button>
-            </div>
-
-            @switch (planActual) {
-                @case ('basico') {
-                    <div class="bg-white p-4 rounded-lg shadow">
-                        <h2 class="text-xl font-bold text-green-700">Plan Básico</h2>
-                        <p class="text-2xl font-bold my-2">$9.99/mes</p>
-                        <ul class="list-disc ml-5">
-                            <li>5 GB de almacenamiento</li>
-                            <li>Soporte por email</li>
-                            <li>1 usuario</li>
-                        </ul>
-                    </div>
-                }
-                @case ('pro') {
-                    <div class="bg-white p-4 rounded-lg shadow">
-                        <h2 class="text-xl font-bold text-blue-700">Plan Pro</h2>
-                        <p class="text-2xl font-bold my-2">$29.99/mes</p>
-                        <ul class="list-disc ml-5">
-                            <li>50 GB de almacenamiento</li>
-                            <li>Soporte prioritario</li>
-                            <li>5 usuarios</li>
-                            <li>Integraciones avanzadas</li>
-                        </ul>
-                    </div>
-                }
-                @case ('premium') {
-                    <div class="bg-white p-4 rounded-lg shadow">
-                        <h2 class="text-xl font-bold text-purple-700">Plan Premium</h2>
-                        <p class="text-2xl font-bold my-2">$79.99/mes</p>
-                        <ul class="list-disc ml-5">
-                            <li>500 GB de almacenamiento</li>
-                            <li>Soporte 24/7</li>
-                            <li>Usuarios ilimitados</li>
-                            <li>API completa</li>
-                            <li>Análisis avanzado</li>
-                        </ul>
-                    </div>
-                }
-                @case ('enterprise') {
-                    <div class="bg-white p-4 rounded-lg shadow">
-                        <h2 class="text-xl font-bold text-orange-700">Plan Enterprise</h2>
-                        <p class="text-2xl font-bold my-2">Precio personalizado</p>
-                        <ul class="list-disc ml-5">
-                            <li>Almacenamiento ilimitado</li>
-                            <li>Soporte dedicado</li>
-                            <li>Usuarios ilimitados</li>
-                            <li>Infraestructura dedicada</li>
-                            <li>SLA garantizado</li>
-                            <li>Consultoría incluida</li>
-                        </ul>
-                    </div>
-                }
-                @default {
-                    <div class="bg-gray-200 p-4 rounded-lg">
-                        <p class="text-gray-600">Selecciona un plan para ver los detalles</p>
-                    </div>
-                }
+            @empty {
+                <div class="w-full text-center py-12">
+                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 mb-4"></div>
+                    <p class="text-gray-600 text-lg">Cargando películas...</p>
+                </div>
             }
         </div>
     </div>
 
-    <!-- NUEVO: Otro ejemplo de @switch - Estados de pedido -->
-    <div class="bg-pink-300 m-2 p-2 rounded-xl">
-        <h1 class="text-2xl mb-3 font-extralight">Directiva @ switch - Estado de Pedido</h1>
-        <hr>
-        <div class="m-3">
-            <div class="flex gap-2 mb-4 flex-wrap">
-                <button (click)="cambiarEstadoPedido('pendiente')" 
-                    class="bg-yellow-600 p-2 rounded text-white hover:bg-yellow-700">
-                    Pendiente
-                </button>
-                <button (click)="cambiarEstadoPedido('procesando')" 
-                    class="bg-blue-600 p-2 rounded text-white hover:bg-blue-700">
-                    Procesando
-                </button>
-                <button (click)="cambiarEstadoPedido('enviado')" 
-                    class="bg-indigo-600 p-2 rounded text-white hover:bg-indigo-700">
-                    Enviado
-                </button>
-                <button (click)="cambiarEstadoPedido('entregado')" 
-                    class="bg-green-600 p-2 rounded text-white hover:bg-green-700">
-                    Entregado
-                </button>
-                <button (click)="cambiarEstadoPedido('cancelado')" 
-                    class="bg-red-600 p-2 rounded text-white hover:bg-red-700">
-                    Cancelado
-                </button>
-            </div>
+    <!-- Header -->
+    <div class="px-4 sm:px-8 mb-6">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2"> Top Rated Series</h1>
+        <p class="text-gray-600">Las series mejor valoradas</p>
+    </div>
 
-            @switch (estadoPedido) {
-                @case ('pendiente') {
-                    <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4">
-                        <div class="flex items-center">
-                            <span class="text-3xl mr-3">⏳</span>
-                            <div>
-                                <p class="font-bold text-yellow-700">Pedido Pendiente</p>
-                                <p class="text-yellow-600">Tu pedido está esperando confirmación de pago</p>
-                            </div>
-                        </div>
-                    </div>
-                }
-                @case ('procesando') {
-                    <div class="bg-blue-100 border-l-4 border-blue-500 p-4">
-                        <div class="flex items-center">
-                            <span class="text-3xl mr-3">⚙️</span>
-                            <div>
-                                <p class="font-bold text-blue-700">Procesando Pedido</p>
-                                <p class="text-blue-600">Estamos preparando tu pedido para el envío</p>
-                            </div>
-                        </div>
-                    </div>
-                }
-                @case ('enviado') {
-                    <div class="bg-indigo-100 border-l-4 border-indigo-500 p-4">
-                        <div class="flex items-center">
-                            <span class="text-3xl mr-3">🚚</span>
-                            <div>
-                                <p class="font-bold text-indigo-700">Pedido Enviado</p>
-                                <p class="text-indigo-600">Tu pedido está en camino. Número de rastreo: #ABC123456</p>
-                            </div>
-                        </div>
-                    </div>
-                }
-                @case ('entregado') {
-                    <div class="bg-green-100 border-l-4 border-green-500 p-4">
-                        <div class="flex items-center">
-                            <span class="text-3xl mr-3">✅</span>
-                            <div>
-                                <p class="font-bold text-green-700">Pedido Entregado</p>
-                                <p class="text-green-600">¡Tu pedido ha sido entregado exitosamente!</p>
-                            </div>
-                        </div>
-                    </div>
-                }
-                @case ('cancelado') {
-                    <div class="bg-red-100 border-l-4 border-red-500 p-4">
-                        <div class="flex items-center">
-                            <span class="text-3xl mr-3">❌</span>
-                            <div>
-                                <p class="font-bold text-red-700">Pedido Cancelado</p>
-                                <p class="text-red-600">Este pedido ha sido cancelado. Reembolso en proceso.</p>
-                            </div>
-                        </div>
-                    </div>
-                }
-                @default {
-                    <div class="bg-gray-100 border-l-4 border-gray-400 p-4">
-                        <p class="text-gray-600">Estado desconocido</p>
-                    </div>
-                }
+    <!-- Scroll horizontal -->
+    <div class="px-4 sm:px-8">
+        <div class="flex gap-4 overflow-x-auto scrollbar-hide pb-4 scroll-smooth snap-x snap-mandatory">
+            @for (serie of topRatedSeries; track serie.id) {
+                <app-movie-card [movie]="serie"></app-movie-card>
+            }
+            
+            @empty {
+                <div class="w-full text-center py-12">
+                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 mb-4"></div>
+                    <p class="text-gray-600 text-lg">Cargando películas...</p>
+                </div>
             }
         </div>
     </div>
 
-</div>
+
+
+<!-- Estilos CSS para ocultar scrollbar -->
+<style>
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+</style>
