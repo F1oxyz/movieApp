@@ -1,0 +1,273 @@
+<div class="min-h-screen bg-white">
+
+    <!-- Hero Section -->
+    <div class="relative h-[70vh] overflow-hidden">
+        <img [src]="'https://image.tmdb.org/t/p/original' + serie.backdrop_path" [alt]="serie.name"
+            class="w-full h-full object-cover">
+
+        <div class="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent"></div>
+
+        <div class="absolute inset-0 flex items-end">
+            <div class="container mx-auto px-4 sm:px-8 pb-12">
+                <div class="flex flex-col lg:flex-row gap-8 items-end">
+
+                    <!-- Poster -->
+                    <div class="flex-none">
+                        <img [src]="'https://image.tmdb.org/t/p/w500' + serie.poster_path" [alt]="serie.name"
+                            class="w-48 sm:w-64 rounded-xl shadow-2xl border-4 border-blue-600">
+                    </div>
+
+                    <!-- Info -->
+                    <div class="flex-1 space-y-4">
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900">
+                            {{serie.name}}
+                        </h1>
+
+                        @if (serie.tagline) {
+                            <p class="text-xl text-gray-700 italic">"{{serie.tagline}}"</p>
+                        }
+
+                        <!-- Meta info -->
+                        <div class="flex flex-wrap items-center gap-4 text-gray-700">
+                            <!-- Rating -->
+                            <div class="flex items-center gap-2 bg-yellow-400 text-gray-900 px-3 py-1.5 rounded-full font-bold">
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                </svg>
+                                <span>{{serie.vote_average.toFixed(1)}}</span>
+                            </div>
+
+                            <!-- Fecha estreno -->
+                            <span class="text-lg font-semibold">{{serie.first_air_date | date: 'yyyy'}}</span>
+
+                            <!-- Temporadas y episodios -->
+                            <span class="flex items-center gap-1 font-semibold">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/>
+                                </svg>
+                                {{serie.number_of_seasons}} temp · {{serie.number_of_episodes}} ep
+                            </span>
+
+                            <!-- Status -->
+                            <span class="px-3 py-1 rounded-full text-sm font-semibold text-white"
+                                [class.bg-green-500]="serie.status === 'Returning Series'"
+                                [class.bg-red-500]="serie.status === 'Ended'"
+                                [class.bg-gray-500]="serie.status !== 'Returning Series' && serie.status !== 'Ended'">
+                                {{serie.status === 'Returning Series' ? 'En emisión' : serie.status === 'Ended' ? 'Finalizada' : serie.status}}
+                            </span>
+                        </div>
+
+                        <!-- Genres -->
+                        <div class="flex flex-wrap gap-2">
+                            @for (genre of serie.genres; track genre.id) {
+                                <span class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg border border-blue-300 text-sm font-semibold">
+                                    {{genre.name}}
+                                </span>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Section -->
+    <div class="container mx-auto px-4 sm:px-8 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Main content -->
+            <div class="lg:col-span-2 space-y-8">
+
+                <!-- Video Player -->
+                <!-- <div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Reproductor</h2>
+                    <div class="relative bg-gray-900 rounded-xl overflow-hidden shadow-2xl aspect-video">
+                        <iframe
+                            [src]="'https://vimeus.com/e/tv?tmdb=' + serie.id + '&view_key=' + VIEW_KEY | sanitizeUrl"
+                            width="100%" height="100%" frameborder="0" allowfullscreen referrerpolicy="origin">
+                        </iframe>
+                    </div>
+                </div> -->
+
+                <!-- Overview -->
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Sinopsis</h2>
+                    <p class="text-gray-700 text-lg leading-relaxed">{{serie.overview}}</p>
+                </div>
+
+                <!-- Cast Section -->
+                @if (cast.length > 0) {
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Reparto Principal</h2>
+                        <div class="flex gap-4 overflow-x-auto scrollbar-hide pb-4 scroll-smooth snap-x snap-mandatory">
+                            @for (actor of cast.slice(0, 15); track actor.id) {
+                                <app-actor-card [actor]="actor"></app-actor-card>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <!-- Seasons -->
+                @if (serie.seasons.length > 0) {
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Temporadas</h2>
+                        <div class="flex gap-4 overflow-x-auto scrollbar-hide pb-4 snap-x snap-mandatory">
+                            @for (season of serie.seasons; track season.id) {
+                                <div class="flex-none w-36 snap-start">
+                                    <div class="bg-gray-50 rounded-lg overflow-hidden border-2 border-gray-200 hover:border-blue-400 transition-all hover:shadow-lg">
+                                        @if (season.poster_path) {
+                                            <img [src]="'https://image.tmdb.org/t/p/w185' + season.poster_path"
+                                                [alt]="season.name"
+                                                class="w-full aspect-[2/3] object-cover">
+                                        } @else {
+                                            <div class="w-full aspect-[2/3] bg-gray-200 flex items-center justify-center">
+                                                <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/>
+                                                </svg>
+                                            </div>
+                                        }
+                                        <div class="p-2">
+                                            <p class="text-gray-900 font-semibold text-sm line-clamp-1">{{season.name}}</p>
+                                            <p class="text-gray-500 text-xs">{{season.episode_count}} episodios</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <!-- Stats -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-blue-50 rounded-lg p-5 border-2 border-blue-200">
+                        <p class="text-gray-600 text-sm mb-1 font-semibold">Temporadas</p>
+                        <p class="text-gray-900 text-xl font-bold">{{serie.number_of_seasons}}</p>
+                    </div>
+                    <div class="bg-blue-50 rounded-lg p-5 border-2 border-blue-200">
+                        <p class="text-gray-600 text-sm mb-1 font-semibold">Episodios</p>
+                        <p class="text-gray-900 text-xl font-bold">{{serie.number_of_episodes}}</p>
+                    </div>
+                    <div class="bg-blue-50 rounded-lg p-5 border-2 border-blue-200">
+                        <p class="text-gray-600 text-sm mb-1 font-semibold">Votos</p>
+                        <p class="text-gray-900 text-xl font-bold">{{serie.vote_count.toLocaleString()}}</p>
+                    </div>
+                    <div class="bg-blue-50 rounded-lg p-5 border-2 border-blue-200">
+                        <p class="text-gray-600 text-sm mb-1 font-semibold">Popularidad</p>
+                        <p class="text-gray-900 text-xl font-bold">{{serie.popularity.toFixed(0)}}</p>
+                    </div>
+                </div>
+
+                <!-- Production Companies -->
+                @if (serie.production_companies.length > 0) {
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Productoras</h2>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                            @for (company of serie.production_companies; track company.id) {
+                                <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-center justify-center gap-3 border-2 border-gray-200 hover:border-blue-300 transition-colors">
+                                    @if (company.logo_path) {
+                                        <img [src]="'https://image.tmdb.org/t/p/w200' + company.logo_path"
+                                            [alt]="company.name" class="max-h-12 w-auto object-contain">
+                                    }
+                                    <p class="text-gray-600 text-sm text-center font-medium">{{company.name}}</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+
+                <!-- Info -->
+                <div class="bg-gray-50 rounded-xl p-6 border-2 border-gray-200 space-y-4">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Información</h3>
+
+                    <div>
+                        <p class="text-gray-600 text-sm mb-1 font-semibold">Nombre Original</p>
+                        <p class="text-gray-900 font-medium">{{serie.original_name}}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm mb-1 font-semibold">Idioma Original</p>
+                        <p class="text-gray-900 font-medium">{{serie.original_language.toUpperCase()}}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm mb-1 font-semibold">Primer Episodio</p>
+                        <p class="text-gray-900 font-medium">{{serie.first_air_date | date: 'longDate'}}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm mb-1 font-semibold">Último Episodio</p>
+                        <p class="text-gray-900 font-medium">{{serie.last_air_date | date: 'longDate'}}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm mb-1 font-semibold">Tipo</p>
+                        <p class="text-gray-900 font-medium">{{serie.type}}</p>
+                    </div>
+
+                    @if (serie.spoken_languages.length > 0) {
+                        <div>
+                            <p class="text-gray-600 text-sm mb-2 font-semibold">Idiomas</p>
+                            <div class="flex flex-wrap gap-2">
+                                @for (lang of serie.spoken_languages; track lang.iso_639_1) {
+                                    <span class="bg-white text-gray-700 px-3 py-1 rounded-full text-xs border border-gray-300 font-medium">
+                                        {{lang.english_name}}
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    @if (serie.created_by.length > 0) {
+                        <div>
+                            <p class="text-gray-600 text-sm mb-2 font-semibold">Creada por</p>
+                            <div class="flex flex-wrap gap-2">
+                                @for (creator of serie.created_by; track creator.id) {
+                                    <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs border border-blue-300 font-medium">
+                                        {{creator.name}}
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    @if (serie.production_countries.length > 0) {
+                        <div>
+                            <p class="text-gray-600 text-sm mb-2 font-semibold">Países de Producción</p>
+                            <div class="flex flex-wrap gap-2">
+                                @for (country of serie.production_countries; track country.iso_3166_1) {
+                                    <span class="bg-white text-gray-700 px-3 py-1 rounded-full text-xs border border-gray-300 font-medium">
+                                        {{country.name}}
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- External Links -->
+                <div class="bg-gray-50 rounded-xl p-6 border-2 border-gray-200">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Enlaces</h3>
+                    <div class="space-y-3">
+                        @if (serie.homepage) {
+                            <a [href]="serie.homepage" target="_blank"
+                                class="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                                Página Oficial
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>ƒ
