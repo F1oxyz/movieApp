@@ -1,4 +1,3 @@
-import { Cartelera } from './../../cartelera/cartelera';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from "@angular/router";
 
