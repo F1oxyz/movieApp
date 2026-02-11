@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MovieService } from '../../services/movieService';
 import { Cast, MovieDetail } from '../../interfaces/interface';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { ActorCard } from '../actor-card/actor-card';
 import { SanitizeUrlPipe } from '../../app/pipes/sanitiza-url.pipe';
 import { environment } from '../../environments/environment.development';
@@ -24,44 +24,50 @@ export class Movie {
 
   activeRoute = inject(ActivatedRoute); //nos permite acceder a los parametros de la ruta actual
   MovieS = inject(MovieService);
+  location = inject(Location);
+
 
   movie !: MovieDetail;
+  cast: Cast[] = [];
 
-  cast : Cast[] = [];
 
   constructor() {
     const id = this.activeRoute.snapshot.paramMap.get('id'); //obtenemos el id de la pelicula desde los parametros de la ruta
-    if(id){
+    if (id) {
       this.obternerPelicula(id);
       this.obtenerCasting(id);
     }
   }
 
-  obternerPelicula(id: String){
+  obternerPelicula(id: String) {
     this.MovieS.obtenerMovie(id).subscribe({
-      next: (peli) =>{
+      next: (peli) => {
         this.movie = peli;
         console.log('Pelicula: ', this.movie);
       },
-      error: (error) =>{
+      error: (error) => {
         console.log('Error: ', error);
-        
+
       }
     });
   }
 
 
-  obtenerCasting(id: String){
+  obtenerCasting(id: String) {
     this.MovieS.obtenerCast(id).subscribe({
-      next: (cast) =>{
+      next: (cast) => {
         this.cast = cast.cast;
         // console.log('Credits: ', cast);
       },
-      error: (error) =>{
+      error: (error) => {
         console.log('Error: ', error);
-        
+
       }
     });
+  }
+
+  volver() {
+    this.location.back();
   }
 
 }

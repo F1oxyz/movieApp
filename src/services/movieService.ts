@@ -37,4 +37,35 @@ export class MovieService {
     return this.http.get<SerieDetail>(`${this.API_URL}tv/${id}?language=es-ES&api_key=${this.API_KEY}`)
   }
 
+  
+// nuevos
+
+// Películas paginadas (popular)
+obtenerPeliculasPagina(page: number = 1) {
+  return this.http.get<MoviesData>(
+    `${this.API_URL}movie/popular?language=es-ES&page=${page}&api_key=${this.API_KEY}`
+  );
+}
+
+// Series paginadas (popular)
+obtenerSeriesPagina(page: number = 1) {
+  return this.http.get<SeriesData>(
+    `${this.API_URL}tv/popular?language=es-ES&page=${page}&api_key=${this.API_KEY}`
+  );
+}
+
+// Búsqueda combinada (películas + series)
+buscar(query: string, page: number = 1) {
+  return this.http.get<MoviesData>(
+    `${this.API_URL}search/multi?query=${encodeURIComponent(query)}&language=es-ES&page=${page}&api_key=${this.API_KEY}`
+  );
+}
+
+// Cast de serie
+obtenerCastSerie(id: String) {
+  return this.http.get<Credits>(
+    `${this.API_URL}tv/${id}/credits?language=es-ES&api_key=${this.API_KEY}`
+  );
+}
+
 }

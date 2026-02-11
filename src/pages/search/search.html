@@ -3,29 +3,53 @@
 
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-1">🎬 Películas</h1>
-            <p class="text-gray-500">Página {{currentPage()}} de {{totalPages()}}</p>
+            @if (buscado()) {
+                <h1 class="text-3xl font-bold text-gray-900 mb-1">
+                    Resultados para
+                    <span class="text-blue-600">"{{query()}}"</span>
+                </h1>
+                <p class="text-gray-500">
+                    {{totalResults()}} resultados · Página {{currentPage()}} de {{totalPages()}}
+                </p>
+            }
         </div>
 
         <!-- Loading -->
         @if (loading()) {
-            <div class="flex justify-center items-center py-24">
+            <div class="flex flex-col justify-center items-center py-24 gap-4">
                 <div class="animate-spin rounded-full h-14 w-14 border-t-2 border-b-2 border-blue-600"></div>
+                <p class="text-gray-500">Buscando "{{query()}}"...</p>
             </div>
         }
 
-        <!-- Grid responsive -->
-        @if (!loading()) {
+        <!-- Sin resultados -->
+        @if (!loading() && buscado() && resultados().length === 0) {
+            <div class="flex flex-col items-center justify-center py-24 gap-4">
+                <svg class="w-20 h-20 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                        d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/>
+                </svg>
+                <h2 class="text-2xl font-bold text-gray-700">Sin resultados</h2>
+                <p class="text-gray-400 text-center">
+                    No encontramos nada para <span class="font-semibold text-gray-600">"{{query()}}"</span>.<br>
+                    Intenta con otro título.
+                </p>
+            </div>
+        }
+
+        <!-- Grid de resultados -->
+        @if (!loading() && resultados().length > 0) {
             <div class="grid gap-3"
                 style="grid-template-columns: repeat(auto-fill, minmax(140px, 1fr))">
-                @for (peli of peliculas(); track peli.id) {
-                    <app-movie-card [movie]="peli"></app-movie-card>
+                @for (item of resultados(); track item.id) {
+                    <app-movie-card [movie]="item"></app-movie-card>
                 }
             </div>
 
             <!-- Paginación -->
             <div class="flex justify-center items-center gap-1 mt-10 flex-wrap">
 
+                <!-- Anterior -->
                 <button (click)="paginaAnterior()" [disabled]="currentPage() === 1"
                     class="flex items-center gap-1 px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed border-gray-200 text-gray-700 hover:border-blue-500 hover:text-blue-600">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -62,6 +86,7 @@
                     </button>
                 }
 
+                <!-- Siguiente -->
                 <button (click)="paginaSiguiente()" [disabled]="currentPage() === totalPages()"
                     class="flex items-center gap-1 px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed border-gray-200 text-gray-700 hover:border-blue-500 hover:text-blue-600">
                     Siguiente
@@ -72,5 +97,6 @@
 
             </div>
         }
+
     </div>
 </div>

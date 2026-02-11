@@ -3,7 +3,7 @@ import { environment } from '../../environments/environment.development';
 import { ActivatedRoute } from '@angular/router';
 import { MovieService } from '../../services/movieService';
 import { Cast, SerieDetail } from '../../interfaces/interface';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { SanitizeUrlPipe } from '../../app/pipes/sanitiza-url.pipe';
 import { ActorCard } from '../actor-card/actor-card';
 
@@ -20,20 +20,23 @@ import { ActorCard } from '../actor-card/actor-card';
 })
 export class Serie {
 
-   serie!: SerieDetail;
+  serie!: SerieDetail;
   cast: Cast[] = [];
+
 
   VIEW_KEY = environment.view_key;
 
   activeRoute = inject(ActivatedRoute); //nos permite acceder a los parametros de la ruta actual
   MovieS = inject(MovieService);
+  location = inject(Location);
+
 
   constructor() {
     const id = this.activeRoute.snapshot.paramMap.get('id');
     if (id) {
       this.obtenerSerie(id);
       this.obtenerCasting(id);
-      
+
     }
   }
 
@@ -59,5 +62,8 @@ export class Serie {
     });
   }
 
+  volver(){
+    this.location.back();
+  }
 
 }

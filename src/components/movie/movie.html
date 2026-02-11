@@ -3,6 +3,14 @@
 
     <!-- Hero Section con backdrop -->
     <div class="relative h-[70vh] overflow-hidden">
+
+        <button (click)="volver()"
+            class="absolute top-4 left-4 z-10 flex items-center gap-2 bg-white/80 backdrop-blur-sm hover:bg-white text-gray-800 font-semibold px-4 py-2 rounded-lg shadow-md border border-gray-200 transition-all hover:shadow-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Volver
+        </button>
         <!-- Backdrop image -->
         <img [src]="'https://image.tmdb.org/t/p/original' + movie.backdrop_path" [alt]="movie.title"
             class="w-full h-full object-cover">
@@ -71,7 +79,7 @@
                             }
                         </div>
 
-                        
+
                     </div>
                 </div>
             </div>

@@ -5,6 +5,7 @@ import { Serie } from '../components/serie/serie';
 import { Movies } from '../pages/movies/movies';
 import { Series } from '../pages/series/series';
 import { Animes } from '../pages/animes/animes';
+import { Search } from '../pages/search/search';
 
 export const routes: Routes = [
     {
@@ -30,6 +31,10 @@ export const routes: Routes = [
     {
         path : 'animes',
         component: Animes
+    },
+    {
+        path : 'search',
+        component: Search
     },
     {
         path: '**',
