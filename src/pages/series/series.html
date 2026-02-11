@@ -1,76 +1,80 @@
-<div class="min-h-screen bg-white py-8 px-4">
-    <div class="max-w-7xl mx-auto">
+<div class="min-h-screen bg-gray-50 py-10 px-6">
+  <div class="max-w-7xl mx-auto">
 
-        <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-1">📺 Series</h1>
-            <p class="text-gray-500">Página {{currentPage()}} de {{totalPages()}}</p>
-        </div>
-
-        <!-- Loading -->
-        @if (loading()) {
-            <div class="flex justify-center items-center py-24">
-                <div class="animate-spin rounded-full h-14 w-14 border-t-2 border-b-2 border-blue-600"></div>
-            </div>
-        }
-
-        <!-- Grid responsive -->
-        @if (!loading()) {
-            <div class="grid gap-3"
-                style="grid-template-columns: repeat(auto-fill, minmax(140px, 1fr))">
-                @for (serie of series(); track serie.id) {
-                    <app-movie-card [movie]="serie"></app-movie-card>
-                }
-            </div>
-
-            <!-- Paginación -->
-            <div class="flex justify-center items-center gap-1 mt-10 flex-wrap">
-
-                <button (click)="paginaAnterior()" [disabled]="currentPage() === 1"
-                    class="flex items-center gap-1 px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed border-gray-200 text-gray-700 hover:border-blue-500 hover:text-blue-600">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                    </svg>
-                    Anterior
-                </button>
-
-                @if (currentPage() > 3) {
-                    <button (click)="cargarPagina(1)"
-                        class="px-3 py-2 rounded-lg border-2 border-gray-200 text-gray-700 hover:border-blue-500 hover:text-blue-600 text-sm font-semibold transition-all">
-                        1
-                    </button>
-                    <span class="text-gray-400 px-1">...</span>
-                }
-
-                @for (pagina of getPaginas(); track pagina) {
-                    <button (click)="cargarPagina(pagina)"
-                        [class.bg-blue-600]="pagina === currentPage()"
-                        [class.text-white]="pagina === currentPage()"
-                        [class.border-blue-600]="pagina === currentPage()"
-                        [class.border-gray-200]="pagina !== currentPage()"
-                        [class.text-gray-700]="pagina !== currentPage()"
-                        class="px-3 py-2 rounded-lg border-2 text-sm font-semibold transition-all hover:border-blue-500 hover:text-blue-600">
-                        {{pagina}}
-                    </button>
-                }
-
-                @if (currentPage() < totalPages() - 2) {
-                    <span class="text-gray-400 px-1">...</span>
-                    <button (click)="cargarPagina(totalPages())"
-                        class="px-3 py-2 rounded-lg border-2 border-gray-200 text-gray-700 hover:border-blue-500 hover:text-blue-600 text-sm font-semibold transition-all">
-                        {{totalPages()}}
-                    </button>
-                }
-
-                <button (click)="paginaSiguiente()" [disabled]="currentPage() === totalPages()"
-                    class="flex items-center gap-1 px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed border-gray-200 text-gray-700 hover:border-blue-500 hover:text-blue-600">
-                    Siguiente
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
-                </button>
-
-            </div>
-        }
+    <!-- Header -->
+    <div class="mb-10">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">
+        📺 Series
+      </h1>
+      <p class="text-gray-500 text-lg">
+        Página {{currentPage()}} de {{totalPages()}}
+      </p>
     </div>
+
+    <!-- Loading -->
+    @if (loading()) {
+      <div class="flex justify-center items-center py-24">
+        <div class="animate-spin rounded-full h-14 w-14 border-t-2 border-b-2 border-blue-600"></div>
+      </div>
+    }
+
+    <!-- Grid optimizado -->
+    @if (!loading()) {
+      <div class="grid gap-6
+                  grid-cols-2
+                  sm:grid-cols-3
+                  md:grid-cols-4
+                  lg:grid-cols-5
+                  xl:grid-cols-5">
+        @for (serie of series(); track serie.id) {
+          <app-movie-card [movie]="serie"></app-movie-card>
+        }
+      </div>
+
+      <!-- Paginación -->
+      <div class="flex justify-center items-center gap-2 mt-12 flex-wrap">
+
+        <button
+          (click)="paginaAnterior()"
+          [disabled]="currentPage() === 1"
+          class="px-5 py-2 rounded-lg bg-white shadow-sm
+                 border border-gray-200
+                 text-gray-700 font-medium
+                 hover:bg-blue-50 hover:border-blue-400
+                 transition-all
+                 disabled:opacity-40 disabled:cursor-not-allowed">
+          Anterior
+        </button>
+
+        @for (pagina of getPaginas(); track pagina) {
+          <button
+            (click)="cargarPagina(pagina)"
+            [class.bg-blue-600]="pagina === currentPage()"
+            [class.text-white]="pagina === currentPage()"
+            [class.border-blue-600]="pagina === currentPage()"
+            class="px-4 py-2 rounded-lg
+                   border border-gray-200
+                   bg-white
+                   font-medium
+                   hover:bg-blue-50 hover:border-blue-400
+                   transition-all">
+            {{pagina}}
+          </button>
+        }
+
+        <button
+          (click)="paginaSiguiente()"
+          [disabled]="currentPage() === totalPages()"
+          class="px-5 py-2 rounded-lg bg-white shadow-sm
+                 border border-gray-200
+                 text-gray-700 font-medium
+                 hover:bg-blue-50 hover:border-blue-400
+                 transition-all
+                 disabled:opacity-40 disabled:cursor-not-allowed">
+          Siguiente
+        </button>
+
+      </div>
+    }
+  </div>
 </div>

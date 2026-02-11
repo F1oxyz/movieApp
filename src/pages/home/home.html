@@ -8,14 +8,17 @@
     <div class="px-4 sm:px-8">
         <div class="flex gap-4 overflow-x-auto scrollbar-hide pb-4 scroll-smooth snap-x snap-mandatory">
             @for (peli of Cartelera; track peli.id) {
-                <app-movie-card [movie]="peli"></app-movie-card>
+            <app-movie-card [movie]="peli" mode="carousel"></app-movie-card>
+
             }
-            
+
             @empty {
-                <div class="w-full text-center py-12">
-                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 mb-4"></div>
-                    <p class="text-gray-600 text-lg">Cargando películas...</p>
+            <div class="w-full text-center py-12">
+                <div
+                    class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 mb-4">
                 </div>
+                <p class="text-gray-600 text-lg">Cargando películas...</p>
+            </div>
             }
         </div>
     </div>
@@ -29,14 +32,16 @@
     <div class="px-4 sm:px-8">
         <div class="flex gap-4 overflow-x-auto scrollbar-hide pb-4 scroll-smooth snap-x snap-mandatory">
             @for (peli of upComing; track peli.id) {
-                <app-movie-card [movie]="peli"></app-movie-card>
+            <app-movie-card [movie]="peli" mode="carousel"></app-movie-card>
             }
-            
+
             @empty {
-                <div class="w-full text-center py-12">
-                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 mb-4"></div>
-                    <p class="text-gray-600 text-lg">Cargando películas...</p>
+            <div class="w-full text-center py-12">
+                <div
+                    class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 mb-4">
                 </div>
+                <p class="text-gray-600 text-lg">Cargando películas...</p>
+            </div>
             }
         </div>
     </div>
@@ -51,27 +56,30 @@
     <div class="px-4 sm:px-8">
         <div class="flex gap-4 overflow-x-auto scrollbar-hide pb-4 scroll-smooth snap-x snap-mandatory">
             @for (serie of topRatedSeries; track serie.id) {
-                <app-movie-card [movie]="serie"></app-movie-card>
+            <app-movie-card [movie]="serie" mode="carousel"></app-movie-card>
             }
-            
+
             @empty {
-                <div class="w-full text-center py-12">
-                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 mb-4"></div>
-                    <p class="text-gray-600 text-lg">Cargando películas...</p>
+            <div class="w-full text-center py-12">
+                <div
+                    class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 mb-4">
                 </div>
+                <p class="text-gray-600 text-lg">Cargando películas...</p>
+            </div>
             }
         </div>
     </div>
 
 
 
-<!-- Estilos CSS para ocultar scrollbar -->
-<style>
-.scrollbar-hide::-webkit-scrollbar {
-    display: none;
-}
-.scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-</style>
+    <!-- Estilos CSS para ocultar scrollbar -->
+    <style>
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>

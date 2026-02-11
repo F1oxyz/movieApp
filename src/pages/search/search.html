@@ -1,102 +1,101 @@
-<div class="min-h-screen bg-white py-8 px-4">
-    <div class="max-w-7xl mx-auto">
+<div class="min-h-screen bg-gray-50 py-10 px-6">
+  <div class="max-w-7xl mx-auto">
 
-        <!-- Header -->
-        <div class="mb-8">
-            @if (buscado()) {
-                <h1 class="text-3xl font-bold text-gray-900 mb-1">
-                    Resultados para
-                    <span class="text-blue-600">"{{query()}}"</span>
-                </h1>
-                <p class="text-gray-500">
-                    {{totalResults()}} resultados · Página {{currentPage()}} de {{totalPages()}}
-                </p>
-            }
-        </div>
-
-        <!-- Loading -->
-        @if (loading()) {
-            <div class="flex flex-col justify-center items-center py-24 gap-4">
-                <div class="animate-spin rounded-full h-14 w-14 border-t-2 border-b-2 border-blue-600"></div>
-                <p class="text-gray-500">Buscando "{{query()}}"...</p>
-            </div>
-        }
-
-        <!-- Sin resultados -->
-        @if (!loading() && buscado() && resultados().length === 0) {
-            <div class="flex flex-col items-center justify-center py-24 gap-4">
-                <svg class="w-20 h-20 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/>
-                </svg>
-                <h2 class="text-2xl font-bold text-gray-700">Sin resultados</h2>
-                <p class="text-gray-400 text-center">
-                    No encontramos nada para <span class="font-semibold text-gray-600">"{{query()}}"</span>.<br>
-                    Intenta con otro título.
-                </p>
-            </div>
-        }
-
-        <!-- Grid de resultados -->
-        @if (!loading() && resultados().length > 0) {
-            <div class="grid gap-3"
-                style="grid-template-columns: repeat(auto-fill, minmax(140px, 1fr))">
-                @for (item of resultados(); track item.id) {
-                    <app-movie-card [movie]="item"></app-movie-card>
-                }
-            </div>
-
-            <!-- Paginación -->
-            <div class="flex justify-center items-center gap-1 mt-10 flex-wrap">
-
-                <!-- Anterior -->
-                <button (click)="paginaAnterior()" [disabled]="currentPage() === 1"
-                    class="flex items-center gap-1 px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed border-gray-200 text-gray-700 hover:border-blue-500 hover:text-blue-600">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                    </svg>
-                    Anterior
-                </button>
-
-                @if (currentPage() > 3) {
-                    <button (click)="cargarPagina(1)"
-                        class="px-3 py-2 rounded-lg border-2 border-gray-200 text-gray-700 hover:border-blue-500 hover:text-blue-600 text-sm font-semibold transition-all">
-                        1
-                    </button>
-                    <span class="text-gray-400 px-1">...</span>
-                }
-
-                @for (pagina of getPaginas(); track pagina) {
-                    <button (click)="cargarPagina(pagina)"
-                        [class.bg-blue-600]="pagina === currentPage()"
-                        [class.text-white]="pagina === currentPage()"
-                        [class.border-blue-600]="pagina === currentPage()"
-                        [class.border-gray-200]="pagina !== currentPage()"
-                        [class.text-gray-700]="pagina !== currentPage()"
-                        class="px-3 py-2 rounded-lg border-2 text-sm font-semibold transition-all hover:border-blue-500 hover:text-blue-600">
-                        {{pagina}}
-                    </button>
-                }
-
-                @if (currentPage() < totalPages() - 2) {
-                    <span class="text-gray-400 px-1">...</span>
-                    <button (click)="cargarPagina(totalPages())"
-                        class="px-3 py-2 rounded-lg border-2 border-gray-200 text-gray-700 hover:border-blue-500 hover:text-blue-600 text-sm font-semibold transition-all">
-                        {{totalPages()}}
-                    </button>
-                }
-
-                <!-- Siguiente -->
-                <button (click)="paginaSiguiente()" [disabled]="currentPage() === totalPages()"
-                    class="flex items-center gap-1 px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed border-gray-200 text-gray-700 hover:border-blue-500 hover:text-blue-600">
-                    Siguiente
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
-                </button>
-
-            </div>
-        }
-
+    <!-- Header -->
+    <div class="mb-10">
+      @if (buscado()) {
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">
+          Resultados para
+          <span class="text-blue-600">"{{query()}}"</span>
+        </h1>
+        <p class="text-gray-500 text-lg">
+          {{totalResults()}} resultados · Página {{currentPage()}} de {{totalPages()}}
+        </p>
+      }
     </div>
+
+    <!-- Loading -->
+    @if (loading()) {
+      <div class="flex flex-col justify-center items-center py-24 gap-4">
+        <div class="animate-spin rounded-full h-14 w-14 border-t-2 border-b-2 border-blue-600"></div>
+        <p class="text-gray-500 text-lg">Buscando "{{query()}}"...</p>
+      </div>
+    }
+
+    <!-- Sin resultados -->
+    @if (!loading() && buscado() && resultados().length === 0) {
+      <div class="flex flex-col items-center justify-center py-24 gap-4">
+        <svg class="w-20 h-20 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/>
+        </svg>
+        <h2 class="text-2xl font-bold text-gray-700">Sin resultados</h2>
+        <p class="text-gray-400 text-center text-lg">
+          No encontramos nada para
+          <span class="font-semibold text-gray-600">"{{query()}}"</span>.
+          Intenta con otro título.
+        </p>
+      </div>
+    }
+
+    <!-- Grid optimizado -->
+    @if (!loading() && resultados().length > 0) {
+      <div class="grid gap-6
+                  grid-cols-2
+                  sm:grid-cols-3
+                  md:grid-cols-4
+                  lg:grid-cols-5
+                  xl:grid-cols-5">
+        @for (item of resultados(); track item.id) {
+          <app-movie-card [movie]="item"></app-movie-card>
+        }
+      </div>
+
+      <!-- Paginación -->
+      <div class="flex justify-center items-center gap-2 mt-12 flex-wrap">
+
+        <button
+          (click)="paginaAnterior()"
+          [disabled]="currentPage() === 1"
+          class="px-5 py-2 rounded-lg bg-white shadow-sm
+                 border border-gray-200
+                 text-gray-700 font-medium
+                 hover:bg-blue-50 hover:border-blue-400
+                 transition-all
+                 disabled:opacity-40 disabled:cursor-not-allowed">
+          Anterior
+        </button>
+
+        @for (pagina of getPaginas(); track pagina) {
+          <button
+            (click)="cargarPagina(pagina)"
+            [class.bg-blue-600]="pagina === currentPage()"
+            [class.text-white]="pagina === currentPage()"
+            [class.border-blue-600]="pagina === currentPage()"
+            class="px-4 py-2 rounded-lg
+                   border border-gray-200
+                   bg-white
+                   font-medium
+                   hover:bg-blue-50 hover:border-blue-400
+                   transition-all">
+            {{pagina}}
+          </button>
+        }
+
+        <button
+          (click)="paginaSiguiente()"
+          [disabled]="currentPage() === totalPages()"
+          class="px-5 py-2 rounded-lg bg-white shadow-sm
+                 border border-gray-200
+                 text-gray-700 font-medium
+                 hover:bg-blue-50 hover:border-blue-400
+                 transition-all
+                 disabled:opacity-40 disabled:cursor-not-allowed">
+          Siguiente
+        </button>
+
+      </div>
+    }
+
+  </div>
 </div>
